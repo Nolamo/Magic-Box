@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+namespace NolanCore
+{
+    public interface ICommand
+    {
+        void Execute();
+        void Undo();
+    }
+}
