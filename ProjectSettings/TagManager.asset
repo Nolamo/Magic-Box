@@ -13,9 +13,9 @@ TagManager:
   - UI
   - SmallProp
   - Prop
-  - 
-  - 
-  - 
+  - PlayerOnly
+  - IgnorePlayer
+  - Door
   - 
   - 
   - 

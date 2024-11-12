@@ -7,43 +7,53 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Banister
+    second: {fileID: 2100000, guid: c3f94e655bc3abd46aa0fd81ad0e894d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Ceiling
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 461444740b68c3948a3863225db0e5bc, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Door
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: c3f94e655bc3abd46aa0fd81ad0e894d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Doorknob
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 526d2d3a6e44abb4d9a8dacdae4f24fe, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: ExteriorWall
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 2549dae1483ca9b4cb36b77d067d0667, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Floor
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 6d7f52d2f593c354cb045ef51042082f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Frame
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 97d1d6777b38de741915b8cc3c90060d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: InteriorWall
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 2e442ba762e5368418385dd2e1d71370, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Pillar
+    second: {fileID: 2100000, guid: 461444740b68c3948a3863225db0e5bc, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Window
-    second: {fileID: 2100000, guid: e84a33733b6d210469ff2bcce77c2529, type: 2}
+    second: {fileID: 2100000, guid: 0b46f9add90ae5b4c8df3c9af871a8ed, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -111,9 +121,9 @@ ModelImporter:
     strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
-    tangentImportMode: 3
-    normalCalculationMode: 4
+    normalImportMode: 1
+    tangentImportMode: 4
+    normalCalculationMode: 0
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0

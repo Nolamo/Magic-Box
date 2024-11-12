@@ -24,7 +24,7 @@ public class Interactor : MonoBehaviour
         }
     }
 
-    public void SetFocusedObject(GameObject focusedObject)
+    public virtual void SetFocusedObject(GameObject focusedObject)
     {
         if(focusedObject == null)
         {
@@ -51,6 +51,11 @@ public class Interactor : MonoBehaviour
                 Debug.Log($"grabbing {prop.name}");
                 grabbedObject = prop.gameObject;
                 grabbedRB = grabbedObject.GetComponent<Rigidbody>();
+                if (grabbedRB.isKinematic)
+                {
+                    grabbedObject = null;
+                    return;
+                }
                 grabbable.Grab(gameObject);
             }
         }

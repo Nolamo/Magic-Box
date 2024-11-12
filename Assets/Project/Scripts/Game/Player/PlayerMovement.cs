@@ -302,9 +302,11 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         Invoke("StopGrounded", 0.1f);
     }
 
+    // add some shit to prevent sliding down slopes
+
     private bool IsGround(Vector3 normal)
     {
-        return (Vector3.Angle(normal, Vector3.up) < _groundAngle);
+        return Vector3.Angle(normal, Vector3.up) < _groundAngle;
     }
 
     private void StopGrounded()

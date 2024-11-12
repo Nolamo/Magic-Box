@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class InteractableGrabbableProp : MonoBehaviour, IInteractable, IGrabbable
+public class InteractableGrabbableProp : Prop, IInteractable, IGrabbable
 {
+
+    [field: SerializeField] public string InteractHint { get; set; } = "Interact";
     public virtual void Interact(GameObject interactor)
     {
 

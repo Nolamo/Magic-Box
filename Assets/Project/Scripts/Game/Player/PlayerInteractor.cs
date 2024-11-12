@@ -1,3 +1,4 @@
+using GameEvents;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +35,7 @@ public class PlayerInteractor : Interactor, IPlayerComponent
     private Quaternion _offsetRotation;
     private Transform _grabRotation;
 
+    [SerializeField] private StringEventAsset _onHintUpdate;
 
     [Header("Throwing")]
     [SerializeField] private float _throwForce = 25;
@@ -204,6 +206,16 @@ public class PlayerInteractor : Interactor, IPlayerComponent
         _grabDistance = Mathf.Clamp(distance, _minGrabDistance, _maxGrabDistance);
 
         SetFocusedObject(newFocusedObject);
+    }
+
+    public override void SetFocusedObject(GameObject focusedObject)
+    {
+        base.SetFocusedObject(focusedObject);
+        if (focusedObject == null) return;
+        if(focusedObject.TryGetComponent(out IInteractable interactable))
+        { 
+            _onHintUpdate?.Invoke(interactable.InteractHint); 
+        }
     }
 
     void ApplySpringForce(Vector3 targetPosition, Rigidbody rb, Rigidbody rb2)

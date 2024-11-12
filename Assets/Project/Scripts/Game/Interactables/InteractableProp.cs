@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InteractableProp : Prop, IInteractable
 {
+    [field: SerializeField] public string InteractHint { get; set; } = "Interact";
+
     public virtual void Interact(GameObject interactor)
     {
         Debug.LogWarning($"undefiend interact behavior on {gameObject.name}");
