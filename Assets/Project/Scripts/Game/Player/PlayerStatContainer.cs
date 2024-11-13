@@ -6,7 +6,7 @@ public class PlayerStatContainer : MonoBehaviour
 {
     [field: SerializeField] public FloatStat stat { get; private set; }
     [field: SerializeField] public float maximum { get; private set; } = 100f;
-    // depletion rate degrades at a rate of around 100% / 1.2 hours
+    // default depletion rate degrades at a rate of around 100% / 1.2 hours
     [SerializeField] private float _depletionRate = 0.02f;
     [SerializeField] private float _depletionTimeStep = 1f;
 
@@ -14,12 +14,12 @@ public class PlayerStatContainer : MonoBehaviour
 
     private void Update()
     {
-        _depletionDelay -= Time.deltaTime;
+        _depletionDelay += Time.deltaTime;
 
-        if (_depletionDelay <= 0f)
+        if (_depletionDelay >= _depletionTimeStep)
         {
-            _depletionDelay += _depletionTimeStep;
-            stat.SetValue(stat.value - (_depletionRate * _depletionDelay));
+            _depletionDelay -= _depletionTimeStep;
+            stat.SetValue(stat.value - (_depletionRate * _depletionTimeStep));
         }
     }
 }

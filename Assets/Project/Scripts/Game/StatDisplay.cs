@@ -7,20 +7,20 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class StatDisplay<T> : MonoBehaviour
 {
-    private TextMeshProUGUI _textMesh;
+    public TextMeshProUGUI textMesh { get; private set; }
 
     [SerializeField] private GameEventAsset<T> _event;
-    [SerializeField] private string _text = "Stat: ";
+    [field: SerializeField] public string text { get; private set; } = "Stat: ";
     private void Awake()
     {
-        _textMesh = GetComponent<TextMeshProUGUI>();
-        _textMesh.text = _text;
+        textMesh = GetComponent<TextMeshProUGUI>();
+        textMesh.text = text;
         _event.AddListener(UpdateText);
     }
 
     protected virtual void UpdateText(T value)
     {
-        _textMesh.text = $"{_text}{value}";
+        textMesh.text = $"{text}{value}";
     }
 
 }

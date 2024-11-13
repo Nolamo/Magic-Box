@@ -256,7 +256,9 @@ public class PlayerInteractor : Interactor, IPlayerComponent
         // Convert delta rotation to an angle-axis representation
         deltaRotation.ToAngleAxis(out float angle, out Vector3 axis);
 
-        Vector3 dampForce = rb.angularVelocity * _torqueSpringDamper;
+        float damperCoefficient = rb.mass * MASS_DAMPER_MODIFIER;
+
+        Vector3 dampForce = rb.angularVelocity * _torqueSpringDamper * damperCoefficient;
 
         // Calculate torque based on angle and axis, and apply damping to smooth rotation
         Vector3 torque = axis * (angle * Mathf.Deg2Rad * _torqueSpringStrength) - dampForce;

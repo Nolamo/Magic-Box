@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public abstract class Stat<T>
 {
     [SerializeField] private T _value;
-    public T value { get { return value; } }    
+    public T value { get { return _value; } }    
     public EventHandler<T> OnStatChanged;
     public GameEventAsset<T> EventAsset;
 
