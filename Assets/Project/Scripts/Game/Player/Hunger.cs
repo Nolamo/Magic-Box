@@ -7,6 +7,8 @@ public class Hunger : PlayerStatContainer
     [SerializeField] private float _starvingThreshold;
     public bool isStarving { get; private set; }
 
+    // To-Do store stomach contents 
+    // vomiting
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class Hunger : PlayerStatContainer
         if (canEat)
         {
             stat.SetValue(stat.value + food.value);
+            Destroy(food.gameObject);
         }
 
         return canEat;
