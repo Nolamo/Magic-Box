@@ -57,6 +57,9 @@ public class PhysicsDoor : InteractableGrabbableProp, IDoor
         }
         else
         {
+            if (interactor == null)
+                return;
+
             Vector3 openDirection = (transform.position - interactor.transform.position).normalized;
             _inFront = Vector3.Dot(_directionTransform.forward, openDirection) > 0;
             Open();
@@ -86,6 +89,8 @@ public class PhysicsDoor : InteractableGrabbableProp, IDoor
         if (_inFront) torque = Vector3.up * _openTorque;
         else torque = Vector3.up * -_openTorque;
 
+        if (_invertTorque) torque *= -1;
+
         _openTime = Time.time + _openDuration;
         _rb.isKinematic = false;
         _rb.AddTorque(torque, ForceMode.Impulse);
@@ -105,6 +110,8 @@ public class PhysicsDoor : InteractableGrabbableProp, IDoor
 
         if (_inFront) torque = Vector3.up * _openTorque;
         else torque = Vector3.up * -_openTorque;
+
+        if (_invertTorque) torque *= -1;
 
         _rb.AddTorque(torque * 1.5f, ForceMode.Impulse);
     }

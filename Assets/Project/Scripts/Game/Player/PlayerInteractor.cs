@@ -21,9 +21,11 @@ public class PlayerInteractor : Interactor, IPlayerComponent
     [SerializeField] private float _grabStrength;
     [SerializeField] private float _grabDamper;
     private const float MASS_DAMPER_MODIFIER = 0.25f;
+    private const float MASS_TORQUE_DAMPER_MODIFIER = 0.3f;
     private const float MIN_DAMPER = 1f;
     [SerializeField] private float _torqueSpringStrength;
     [SerializeField] private float _torqueSpringDamper;
+    [SerializeField] private float _torquePulse = 1.5f;
     private float _grabDistance;
 
     [Header("Push / Pull")]
@@ -138,6 +140,7 @@ public class PlayerInteractor : Interactor, IPlayerComponent
     public override void Grab()
     {
         base.Grab();
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         if(grabbedObject == null) return;
         _grabRotation.localRotation = Quaternion.identity;
         _grabRotation.rotation = Quaternion.LookRotation(grabbedObject.transform.forward, _camera.transform.up);
@@ -256,15 +259,13 @@ public class PlayerInteractor : Interactor, IPlayerComponent
         // Convert delta rotation to an angle-axis representation
         deltaRotation.ToAngleAxis(out float angle, out Vector3 axis);
 
-        float damperCoefficient = rb.mass * MASS_DAMPER_MODIFIER;
-
-        Vector3 dampForce = rb.angularVelocity * _torqueSpringDamper * damperCoefficient;
+        Vector3 dampForce = rb.angularVelocity * _torqueSpringDamper;
 
         // Calculate torque based on angle and axis, and apply damping to smooth rotation
-        Vector3 torque = axis * (angle * Mathf.Deg2Rad * _torqueSpringStrength) - dampForce;
+        Vector3 torque = (axis * (angle * Mathf.Deg2Rad * _torqueSpringStrength) - dampForce) * _torquePulse;
 
         // Apply torque to rotate towards the target
-        rb.AddTorque(torque);
+        rb.AddTorque(torque, ForceMode.Acceleration);
     }
 
     void SpringGrabbedObject()

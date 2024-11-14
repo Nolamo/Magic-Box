@@ -29,8 +29,7 @@ public class Hunger : PlayerStatContainer
 
         if (canEat)
         {
-            stat.SetValue(stat.value + food.value);
-            Destroy(food.gameObject);
+            food.Eat(this);
         }
 
         return canEat;

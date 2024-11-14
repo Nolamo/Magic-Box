@@ -8,6 +8,8 @@ using UnityEngine.Events;
 [System.Serializable]
 public abstract class Stat<T>
 {
+    [field: SerializeField] public string name { get; private set; }
+
     [SerializeField] private T _value;
     public T value { get { return _value; } }    
     public EventHandler<T> OnStatChanged;
@@ -17,7 +19,7 @@ public abstract class Stat<T>
     {
         this._value = value;
         OnStatChanged?.Invoke(this, value);
-        EventAsset?.Invoke(value);
+        if (EventAsset != null) EventAsset?.Invoke(value);
     }
 
     public T GetValue()

@@ -36,12 +36,4 @@ public class TemperatureManager : SingletonMonobehaviour<TemperatureManager>
             _elapsedSincePreviousTick = 0;
         }
     }
-
-    private void OnDestroy()
-    {
-        if(Instance == this)
-        {
-            Destroy(Instance);
-        }
-    }
 }

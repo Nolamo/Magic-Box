@@ -15,7 +15,7 @@ public class TemperatureVolume : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Something entered {gameObject.name}");
+        //Debug.Log($"Something entered {gameObject.name}");
         if (other.TryGetComponent(out Temperature temperature))
         {
             temperature.EnterVolume(this);
@@ -24,7 +24,7 @@ public class TemperatureVolume : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log($"Something left {gameObject.name}");
+        //Debug.Log($"Something left {gameObject.name}");
         if (other.TryGetComponent(out Temperature temperature))
         {
             temperature.ExitVolume(this);   
