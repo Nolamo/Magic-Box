@@ -9,6 +9,9 @@ public class ObjectStatDisplay : MonoBehaviour
     private Temperature _temperature;
     private TextMeshPro _tmp;
 
+    [SerializeField] private bool _displayMass = true;
+    [SerializeField] private bool _displayTemperature = true;
+
     private void Awake()
     {
         _tmp = GetComponent<TextMeshPro>();
@@ -30,8 +33,8 @@ public class ObjectStatDisplay : MonoBehaviour
     {
         if (_tmp == null) return;
         string text = "";
-        if (_rb) text += $"{_rb.mass}";
-        text += $"kg,\n{Mathf.Round(temperature)}°C";
+        if (_rb && _displayMass) text += $"{_rb.mass}kg";
+        if(_temperature && _displayTemperature) text += $"\n{Mathf.Round(temperature)}°C";
         _tmp.text = text;
     }
 

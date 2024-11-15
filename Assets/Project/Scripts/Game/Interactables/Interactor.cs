@@ -18,7 +18,7 @@ public class Interactor : MonoBehaviour
         {
             if(prop is IInteractable interactable)
             {
-                Debug.Log($"interacting with {prop.name}");
+                //Debug.Log($"interacting with {prop.name}");
                 interactable.Interact(gameObject);
             }
         }

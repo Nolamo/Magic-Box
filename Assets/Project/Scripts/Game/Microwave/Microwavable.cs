@@ -1,34 +1,41 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Temperature))]
-public class MicrowavableProp : MonoBehaviour, IMicrowavable
+public class Microwavable : MonoBehaviour, IMicrowavable
 {
     public float cookProgress { get; private set; }
 
     [SerializeField] private List<MicrowaveEvent> MicrowaveEvents;
 
-    [SerializeField] private float _microwaveTemperatureGain;
+    [SerializeField, InspectorLabel("Temperature Gain"), Tooltip("Temperature increase over time while being microwaved")] private float _microwaveTemperatureGain = 10; // 10 temperature gain is enough to reach a little past 100C
 
     private Temperature _temperature;
 
     void Awake()
     {
-        if (MicrowaveEvents == null || MicrowaveEvents.Count <= 0) 
-            return;
+        if (MicrowaveEvents != null || MicrowaveEvents.Count > 0)
+            MicrowaveEvents.Sort();
 
-        MicrowaveEvents.Sort();
         _temperature = GetComponent<Temperature>();
     }
 
     public void Microwave(float amount)
     {
+        // cook the thing
         cookProgress += amount;
 
-        if (_temperature != null) _temperature._temperatureProperties.temperature += _microwaveTemperatureGain * Time.deltaTime;
+        if (_temperature != null)
+        {
+            Debug.Log($"gaining temperature: {_microwaveTemperatureGain * amount}");
+
+            _temperature.temperature += _microwaveTemperatureGain * amount;
+            _temperature.OnTemperatureUpdate?.Invoke(this, _temperature.temperature);
+        }
 
         if (MicrowaveEvents == null || MicrowaveEvents.Count <= 0) 
             return;

@@ -142,6 +142,9 @@ public class PlayerInteractor : Interactor, IPlayerComponent
         base.Grab();
         if(grabbedObject == null) return;
 
+        // grabbed rb detection mode is set to continuous to prevent clipping
+        // this is proooobably going to have to change
+        // TO-DO find a way to turn this on/off dynamically. 
         grabbedRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
         _grabRotation.localRotation = Quaternion.identity;

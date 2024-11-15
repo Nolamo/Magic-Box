@@ -11,6 +11,12 @@ namespace NolanCore
         {
             [SerializeField] public float coolingCoefficient;
             [SerializeField] public float temperature;
+
+            public TemperatureProperties(float coolingCoefficient = 0.1f, float temperature = 10)
+            {
+                this.coolingCoefficient = coolingCoefficient;
+                this.temperature = temperature;
+            }
         }
 
         public static float CalculateDeltaTemperature(float time, float ambientTemperature, float currentTemperature, float coolingCoefficient)

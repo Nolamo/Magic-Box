@@ -423,6 +423,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.044999987, y: 0.045000028, z: 0.03600003}
   m_Center: {x: -0.000000014901161, y: 0.00000017881393, z: -0.000000026077036}
+--- !u!1 &1408348857948941975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8919539715248165146}
+  m_Layer: 7
+  m_Name: MicrowaveVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8919539715248165146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408348857948941975}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.039, z: 0}
+  m_LocalScale: {x: 0.6268988, y: 0.7415419, z: 0.48871896}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8011718087257144172}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944742230371523434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,7 +1040,7 @@ HingeJoint:
     spring: 0
     damper: 0
     targetPosition: 0
-  m_UseMotor: 1
+  m_UseMotor: 0
   m_Motor:
     targetVelocity: 50
     force: 10000
@@ -1555,6 +1586,7 @@ Transform:
   - {fileID: 4430870069567383241}
   - {fileID: 3020496096588114684}
   - {fileID: 3704314695377014248}
+  - {fileID: 8919539715248165146}
   m_Father: {fileID: 4093723588576624144}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &6130333457362198750
@@ -1716,6 +1748,7 @@ MonoBehaviour:
   OnMicrowaveComplete:
     m_PersistentCalls:
       m_Calls: []
+  _microwaveVolume: {fileID: 8919539715248165146}
   <microwaveDoor>k__BackingField: {fileID: 0}
 --- !u!1 &7529417901807836634
 GameObject:

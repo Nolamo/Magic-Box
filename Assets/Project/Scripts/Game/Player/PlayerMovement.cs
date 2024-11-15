@@ -32,8 +32,13 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
     [SerializeField] private float _groundAngle;
     [SerializeField] private LayerMask _whatIsGround;
     private bool _isGrounded;
+    [SerializeField] private float _springTargetDistance = 0.15f;
+    [SerializeField] private float _springDistance = 0.3f;
+    [SerializeField] private float _springStrength;
+    [SerializeField] private float _springDamper;
+    private float _currentSpringDistance;
 
-    // defaults are realistic human movement metrics
+    // defaults are close to realistic human movement metrics
 
     [Header("Locomotion")]
     [SerializeField] private float _walkSpeed = 1.6f;
@@ -47,7 +52,6 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     [Header("Crouching")]
     [SerializeField] private float _crouchSpeed = 0.55f;
-    [SerializeField] private float _jumpHeight = 0.7f;
     [SerializeField] private float _crouchHeight;
     private float _standingHeight;
     private bool _isTryingToCrouch;
@@ -55,6 +59,11 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     private Vector3 _crouchingCapsuleCenter;
     private Vector3 _standingCapsuleCenter;
+
+    [Header("Jumping")]
+    [SerializeField] private float _jumpHeight = 0.7f;
+    [SerializeField] private float _groundCancelDuration = 0.1f;
+    private float _groundCancelDelay;
 
     void OnEnable()
     {
@@ -173,10 +182,13 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         _capsule = GetComponent<CapsuleCollider>();
         _movementSpeed = _walkSpeed;
 
-        _standingHeight = _capsule.height;
+        _standingHeight = _capsule.height - _springTargetDistance;
+        _capsule.height = _standingHeight;
+        _crouchHeight = _crouchHeight - _springTargetDistance;
 
         _crouchingCapsuleCenter = Vector3.up * _crouchHeight / 2;
         _standingCapsuleCenter = Vector3.up * _standingHeight / 2;
+        _capsule.center = _standingCapsuleCenter;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -185,6 +197,11 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     private void Jump(float height)
     {
+        _groundCancelDelay = _groundCancelDuration;
+
+        // cancel current y velocity
+        _rb.AddForce(Vector3.up * -_rb.velocity.y, ForceMode.VelocityChange);
+
         // Calculate the required jump velocity to reach the desired height
         Vector3 jumpVelocity = Vector3.up * Mathf.Sqrt(-2 * Physics.gravity.y * height);
         jumpVelocity *= _rb.mass;
@@ -199,7 +216,11 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     private void FixedUpdate()
     {
+        GroundCheck();
         Move(_movementInput, _movementSpeed);
+
+        if (_groundCancelDelay > 0) _groundCancelDelay -= Time.fixedDeltaTime;
+
         if( _isTryingToCrouch)
         {
             if (_isCrouching == false) Crouch();
@@ -214,7 +235,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         }
     }
 
-    void Move(Vector2 direction, float maxSpeed)
+    public void Move(Vector2 direction, float maxSpeed)
     {
         direction = direction.normalized;
 
@@ -249,7 +270,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         }
     }
 
-    void Look()
+    private void Look()
     {
         if (_isCameraFrozen) return;
 
@@ -263,7 +284,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         _cameraTransform.rotation = Quaternion.Euler(lookRotation);
     }
 
-    float ClampAngle(float angle, float from, float to)
+    private float ClampAngle(float angle, float from, float to)
     {
         // accepts e.g. -80, 80
         if (angle < 0f) angle = 360 + angle;
@@ -271,11 +292,61 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         return Mathf.Min(angle, to);
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void GroundSpring(RaycastHit groundHit)
     {
-        GroundCheck(collision);
+        // calculate spring force to push the player off of the ground with
+
+        float totalDistance = groundHit.distance - _capsule.center.y;
+
+        _currentSpringDistance = totalDistance;
+
+        Rigidbody hitRB = groundHit.collider.GetComponent<Rigidbody>();
+
+        float displacement = _springTargetDistance - totalDistance;
+        float springForce = displacement * _springStrength;
+
+        float dampForce = _rb.velocity.y * _springDamper;
+
+        Vector3 force = Vector3.up * (springForce - dampForce);
+        
+        _rb.AddForce(force * _rb.mass);
+
+        // add an equivalent force to the rigidbody the player might be standing on
+        if(hitRB != null)
+        {
+            hitRB.AddForceAtPosition(-force, groundHit.point);
+        }
     }
 
+    private void GroundCheck()
+    {
+        if (_groundCancelDelay > 0)
+            return;
+
+        // check for valid ground by casting a sphere downwards
+
+        Ray ray = new Ray(_rb.position + _capsule.center, Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.SphereCast(ray, _capsule.radius - 0.01f, out hit, _springDistance + _capsule.center.y, _whatIsGround, QueryTriggerInteraction.Ignore))
+        {
+            if (IsGround(hit.normal) == false)
+                return;
+        }
+        else 
+            return;
+
+        _isGrounded = true;
+
+        GroundSpring(hit);
+
+        CancelInvoke("StopGrounded");
+        Invoke("StopGrounded", 0.1f);
+    }
+
+    /* - COLLISION-BASED GROUNDED DETECTION METHOD-
+     * replaced by capsule-based which is above this
+     
     void GroundCheck(Collision collision)
     {
         if ((_whatIsGround & (1 << collision.gameObject.layer)) == 0)
@@ -301,6 +372,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         CancelInvoke("StopGrounded");
         Invoke("StopGrounded", 0.1f);
     }
+    */
 
     // add some shit to prevent sliding down slopes
 
@@ -314,12 +386,12 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         _isGrounded = false;
     }
 
-    void Crouch()
+    private void Crouch()
     {
         _isCrouching = true;
         _movementSpeed = _crouchSpeed;
 
-        _capsule.center = _crouchingCapsuleCenter;
+        _capsule.center = _crouchingCapsuleCenter + (Vector3.up * _springTargetDistance);
 
         _capsule.height = _crouchHeight;
         _cameraTransform.localPosition = Vector3.up * (_capsule.height + _eyeLevelOffset);
@@ -334,7 +406,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         // todo: animate camera moving up/down
     }
 
-    void AttemptUnCrouch()
+    private void AttemptUnCrouch()
     {
         Vector3 targetPosition = _rb.position;
         RaycastHit hit;
@@ -385,5 +457,20 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         {
             _movementSpeed = _walkSpeed;
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_rb.position + Vector3.down * (_capsule.radius - _springTargetDistance), _capsule.radius);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(_rb.position + Vector3.down * (_capsule.radius - _springDistance), _capsule.radius);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(_rb.position + Vector3.down * _currentSpringDistance, _capsule.radius);
+
     }
 }

@@ -49,7 +49,7 @@ public class PhysicsDoor : InteractableGrabbableProp, IDoor
     {
         base.Interact(interactor);
 
-        Debug.Log("interacted with door!");
+        //Debug.Log("interacted with door!");
 
         if (isOpen)
         {

@@ -25,7 +25,6 @@ public class Temperature : MonoBehaviour
 
     private void Start()
     {
-        _temperatureProperties.temperature = 10;
         _currentAmbientProperties = TemperatureManager.Instance.temperatureProperties;
         _activeVolumes = new List<TemperatureVolume>();
     }
