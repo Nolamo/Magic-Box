@@ -1637,7 +1637,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7193994572085170537}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 75
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1716,7 +1716,7 @@ MonoBehaviour:
   OnMicrowaveComplete:
     m_PersistentCalls:
       m_Calls: []
-  _microwaveDoor: {fileID: 0}
+  <microwaveDoor>k__BackingField: {fileID: 0}
 --- !u!1 &7529417901807836634
 GameObject:
   m_ObjectHideFlags: 0

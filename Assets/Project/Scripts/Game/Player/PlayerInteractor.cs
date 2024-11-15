@@ -140,8 +140,10 @@ public class PlayerInteractor : Interactor, IPlayerComponent
     public override void Grab()
     {
         base.Grab();
-        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         if(grabbedObject == null) return;
+
+        grabbedRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
         _grabRotation.localRotation = Quaternion.identity;
         _grabRotation.rotation = Quaternion.LookRotation(grabbedObject.transform.forward, _camera.transform.up);
     }

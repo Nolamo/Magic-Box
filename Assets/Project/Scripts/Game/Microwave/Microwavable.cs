@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Temperature))]
 public class MicrowavableProp : MonoBehaviour, IMicrowavable
 {
     public float cookProgress { get; private set; }
 
     [SerializeField] private List<MicrowaveEvent> MicrowaveEvents;
+
+    [SerializeField] private float _microwaveTemperatureGain;
+
+    private Temperature _temperature;
 
     void Awake()
     {
@@ -16,11 +21,14 @@ public class MicrowavableProp : MonoBehaviour, IMicrowavable
             return;
 
         MicrowaveEvents.Sort();
+        _temperature = GetComponent<Temperature>();
     }
 
     public void Microwave(float amount)
     {
         cookProgress += amount;
+
+        if (_temperature != null) _temperature._temperatureProperties.temperature += _microwaveTemperatureGain * Time.deltaTime;
 
         if (MicrowaveEvents == null || MicrowaveEvents.Count <= 0) 
             return;

@@ -9,6 +9,13 @@ using System;
 public class Temperature : MonoBehaviour
 {
     [field: SerializeField] public NolanPhysics.TemperatureProperties _temperatureProperties;
+    public float temperature { 
+        get => _temperatureProperties.temperature; 
+        set 
+        { 
+            _temperatureProperties.temperature = value; 
+        } 
+    }
     private List<TemperatureVolume> _activeVolumes;
     private NolanPhysics.TemperatureProperties _currentAmbientProperties;
 
